@@ -15,6 +15,8 @@ services:
     restart: always
   nginx:
     build: nginx
+    volumes:
+      - ./log/nginx:/var/log/nginx
     ports:
       - 80:80
     environment:
