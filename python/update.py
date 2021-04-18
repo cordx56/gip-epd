@@ -4,9 +4,9 @@ import base64
 import traceback
 from PIL import Image, ImageDraw, ImageFont
 from flask import request, jsonify
-#from epdpil import EPD
+from epdpil import EPD
 
-#epd = EPD()
+epd = EPD()
 epddata = { "image": "init.png", "texts": [] }
 
 def update():
@@ -34,9 +34,9 @@ def draw():
                     text["text"] if "text" in text else "",
                     (0, 0, 0)
                 )
-        #epd.init()
-        #epd.display_frame(epd.get_frame_buffer(img.transpose(Image.ROTATE_180)))
-        #epd.sleep()
+        epd.init()
+        epd.display_frame(epd.get_frame_buffer(img.transpose(Image.ROTATE_180)))
+        epd.sleep()
         img.save(buffer, format="png")
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
