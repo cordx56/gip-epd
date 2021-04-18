@@ -1,4 +1,4 @@
-FROM node:12
+FROM arm32v6/node:12-alpine
 WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
