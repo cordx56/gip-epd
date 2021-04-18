@@ -1,0 +1,19 @@
+version: "3"
+services:
+  api:
+    build: python
+    volumes:
+      - ./log/gunicorn:/app/log/gunicorn
+    environment:
+      TZ: Asia/Tokyo
+    restart: always
+  nextjs:
+    build: next
+    restart: always
+  nginx:
+    build: nginx
+    ports:
+      - 80:80
+    environment:
+      TZ: Asia/Tokyo
+    restart: always
