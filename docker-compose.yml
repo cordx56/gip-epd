@@ -4,6 +4,8 @@ services:
     build: python
     volumes:
       - ./log/gunicorn:/app/log/gunicorn
+      - ./image:/app/image
+      - ./font:/app/font
     environment:
       TZ: Asia/Tokyo
     restart: always
