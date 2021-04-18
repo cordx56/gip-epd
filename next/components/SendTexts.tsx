@@ -39,11 +39,10 @@ const SendTexts = () => {
 
   const addText = () => {
     const t = texts.concat();
-    t.push({ x: 0, y: 0, size: 18, font: fonts[0], text: "" });
+    t.push({ x: 0, y: 0, size: 18, font: fonts[0], color: "Black", text: "" });
     setTexts(t);
   };
   const deleteText = (index) => {
-    const t = texts.concat();
     setTexts(texts.filter((text, i) => index !== i));
   };
   const onXChange = (e, index) => {
@@ -64,6 +63,11 @@ const SendTexts = () => {
   const onFontChange = (e, index) => {
     const t = texts.concat();
     t[index].font = e.target.value;
+    setTexts(t);
+  };
+  const onColorChange = (e, index) => {
+    const t = texts.concat();
+    t[index].color = e.target.value;
     setTexts(t);
   };
   const onTextChange = (e, index) => {
@@ -154,18 +158,32 @@ const SendTexts = () => {
                   />
                 </Form.Group>
               </Form.Row>
-              <Form.Group>
-                <Form.Label>Font</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={text.font}
-                  onChange={(e) => onFontChange(e, index)}
-                >
-                  {fonts.map((font) => (
-                    <option key={font}>{font}</option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
+              <Form.Row>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Font</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={text.font}
+                    onChange={(e) => onFontChange(e, index)}
+                  >
+                    {fonts.map((font) => (
+                      <option key={font}>{font}</option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Color</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={text.color}
+                    onChange={(e) => onColorChange(e, index)}
+                  >
+                    <option>Black</option>
+                    <option>White</option>
+                    <option>Red</option>
+                  </Form.Control>
+                </Form.Group>
+              </Form.Row>
               <Form.Group>
                 <Form.Label>Text</Form.Label>
                 <Form.Control

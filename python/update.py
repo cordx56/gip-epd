@@ -27,13 +27,18 @@ def draw():
     with Image.open(os.path.join("./image", epddata["image"])) as img:
         drw = ImageDraw.Draw(img)
         for text in epddata["texts"]:
-            if "font" in text:
-                drw.font = ImageFont.truetype(os.path.join("./font", text["font"]), int(text["size"]) if "size" in text else 18)
-                drw.text(
-                    (int(text["x"]), int(text["y"])) if "x" in text and "y" in text else (0, 0),
-                    text["text"] if "text" in text else "",
-                    (0, 0, 0)
-                )
+            drw.font = ImageFont.truetype(os.path.join("./font", text["font"]), int(text["size"]) if "size" in text else 18)
+            color = (0, 0, 0)
+            if "color" in text:
+                if text["color"] == "White":
+                    color = (255, 255, 255)
+                if text["color"] == "Red":
+                    color = (255, 0, 0)
+            drw.text(
+                (int(text["x"]), int(text["y"])) if "x" in text and "y" in text else (0, 0),
+                text["text"] if "text" in text else "",
+                color
+            )
         epd.init()
         epd.display_frame(epd.get_frame_buffer(img.transpose(Image.ROTATE_180)))
         epd.sleep()
