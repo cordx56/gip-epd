@@ -6,6 +6,7 @@ services:
       - ./log/gunicorn:/app/log/gunicorn
       - ./image:/app/image
       - ./font:/app/font
+    privileged: true
     environment:
       TZ: Asia/Tokyo
     restart: always
