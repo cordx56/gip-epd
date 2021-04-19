@@ -23,7 +23,7 @@ const SendTexts = () => {
       })
       .catch((error) => {
         console.log(error);
-        if (error.response) {
+        if (error.response.data) {
           alert(error.response.data.message);
         }
       });
@@ -85,7 +85,7 @@ const SendTexts = () => {
       })
       .catch((error) => {
         console.log(error);
-        if (error.response) {
+        if (error.response.data) {
           alert(error.response.data.message);
         }
       });
@@ -96,7 +96,7 @@ const SendTexts = () => {
       })
       .catch((error) => {
         console.log(error);
-        if (error.response) {
+        if (error.response.data) {
           alert(error.response.data.message);
         }
       });
@@ -108,7 +108,7 @@ const SendTexts = () => {
       })
       .catch((error) => {
         console.log(error);
-        if (error.response) {
+        if (error.response.data) {
           alert(error.response.data.message);
         }
       });
