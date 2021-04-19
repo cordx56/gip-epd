@@ -7,7 +7,7 @@ from flask import request, jsonify
 from epd5in83bc import EPD
 
 epd = EPD()
-epddata = { "image": "init.png", "texts": [] }
+epddata = { "image": "", "texts": [] }
 
 def update():
     global epddata
