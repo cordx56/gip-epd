@@ -1,4 +1,4 @@
-FROM --platform=linux/arm/v6 python:3.9
+FROM python:3.9
 WORKDIR /app
 COPY Pipfile .
 COPY Pipfile.lock .
