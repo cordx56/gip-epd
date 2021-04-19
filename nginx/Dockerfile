@@ -1,4 +1,4 @@
-FROM arm32v6/nginx:1.19-alpine
+FROM nginx:1.19
 
 COPY nginx.conf /etc/nginx/
 COPY conf.d /etc/nginx/conf.d/
