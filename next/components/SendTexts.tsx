@@ -10,12 +10,9 @@ const SendTexts = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [texts, setTexts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
   const send = () => {
-    const data = {};
-    data["image"] = selectedImage;
-    if (0 < texts.length) {
-      data["texts"] = texts;
-    }
+    const data = { image: selectedImage, texts: texts };
     setIsLoading(true);
     axios
       .post(API_BASE_URL + "/update", data)
@@ -32,6 +29,20 @@ const SendTexts = () => {
         setIsLoading(false);
       });
   };
+  const getPreview = (data) => {
+    axios
+      .post(API_BASE_URL + "/preview", data)
+      .then((response) => {
+        console.log(response);
+        setPreviewImage(response.data.image);
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.response.data) {
+          alert(error.response.data.message);
+        }
+      });
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -39,45 +50,64 @@ const SendTexts = () => {
   };
   const onImageSelectChange = (e) => {
     setSelectedImage(e.target.value);
+    const data = { image: e.target.value, texts: texts };
+    getPreview(data);
   };
 
   const addText = () => {
     const t = texts.concat();
     t.push({ x: 0, y: 0, size: 18, font: fonts[0], color: "Black", text: "" });
     setTexts(t);
+    const data = { image: selectedImage, texts: t };
+    getPreview(data);
   };
   const deleteText = (index) => {
-    setTexts(texts.filter((text, i) => index !== i));
+    const t = texts.filter((text, i) => index !== i);
+    setTexts(t);
+    const data = { image: selectedImage, texts: t };
+    getPreview(data);
   };
   const onXChange = (e, index) => {
     const t = texts.concat();
     t[index].x = e.target.value;
     setTexts(t);
+    const data = { image: selectedImage, texts: t };
+    getPreview(data);
   };
   const onYChange = (e, index) => {
     const t = texts.concat();
     t[index].y = e.target.value;
     setTexts(t);
+    const data = { image: selectedImage, texts: t };
+    getPreview(data);
   };
   const onSizeChange = (e, index) => {
     const t = texts.concat();
     t[index].size = e.target.value;
     setTexts(t);
+    const data = { image: selectedImage, texts: t };
+    getPreview(data);
   };
   const onFontChange = (e, index) => {
     const t = texts.concat();
     t[index].font = e.target.value;
     setTexts(t);
+    const data = { image: selectedImage, texts: t };
+    getPreview(data);
   };
   const onColorChange = (e, index) => {
     const t = texts.concat();
     t[index].color = e.target.value;
     setTexts(t);
+    const data = { image: selectedImage, texts: t };
+    getPreview(data);
   };
   const onTextChange = (e, index) => {
     const t = texts.concat();
     t[index].text = e.target.value;
     setTexts(t);
+    const data = { image: selectedImage, texts: t };
+    getPreview(data);
   };
 
   useEffect(() => {
@@ -109,6 +139,7 @@ const SendTexts = () => {
       .then((response) => {
         setSelectedImage(response.data.data.image);
         setTexts(response.data.data.texts);
+        setPreviewImage(response.data.image);
       })
       .catch((error) => {
         console.log(error);
@@ -117,8 +148,16 @@ const SendTexts = () => {
         }
       });
   }, []);
+
+  const imgStyle = {
+    width: "80%",
+  };
   return (
     <>
+      <div>
+        <h2>Preview</h2>
+        <img src={"data:image/png;base64," + previewImage} style={imgStyle} />
+      </div>
       <Form onSubmit={onSubmit}>
         <Form.Group>
           <Form.Label>Image</Form.Label>
@@ -219,7 +258,7 @@ const SendTexts = () => {
       </Form>
       <div>
         <h2>Result</h2>
-        <img src={"data:image/png;base64," + receivedImage} />
+        <img src={"data:image/png;base64," + receivedImage} style={imgStyle} />
       </div>
     </>
   );
