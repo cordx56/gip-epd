@@ -5,9 +5,9 @@ import json
 import traceback
 from PIL import Image, ImageDraw, ImageFont
 from flask import request, jsonify
-#from epd5in83bc import EPD
+from epd5in83bc import EPD
 
-#epd = EPD()
+epd = EPD()
 def read_epddata():
     if not os.path.isfile("epddata.json"):
         return { "image": "", "texts": [] }
@@ -64,9 +64,9 @@ def draw(epddata):
                 color
             )
         b, r = split_red_black(img)
-        #epd.init()
-        #epd.display(epd.getbuffer(b), epd.getbuffer(r))
-        #epd.sleep()
+        epd.init()
+        epd.display(epd.getbuffer(b), epd.getbuffer(r))
+        epd.sleep()
         img.save(buffer, format="png")
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
