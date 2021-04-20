@@ -5,9 +5,9 @@ import json
 import traceback
 from PIL import Image, ImageDraw, ImageFont
 from flask import request, jsonify
-from epd5in83bc import EPD
+#from epd5in83bc import EPD
 
-epd = EPD()
+#epd = EPD()
 def read_epddata():
     if not os.path.isfile("epddata.json"):
         return { "image": "", "texts": [] }
@@ -31,7 +31,7 @@ def update():
         return jsonify({ "status": False, "message": "Draw error!\n" + str(e) + "\n" + traceback.format_exc() }), 500
     return jsonify({ "status": True, "image": img_base64 })
 
-def split_red_black(img):
+def split_black_red(img):
     img_rgb = img.convert('RGB')
     size = img_rgb.size
     imgb = Image.new("RGB", size, (255, 255, 255))
@@ -46,7 +46,7 @@ def split_red_black(img):
                     imgr.putpixel((x, y), (0, 0, 0))
     return (imgb, imgr)
 
-def draw(epddata):
+def generate_image(epddata):
     buffer = io.BytesIO()
     with Image.open(os.path.join("./image", epddata["image"])) as img:
         drw = ImageDraw.Draw(img)
@@ -63,13 +63,34 @@ def draw(epddata):
                 text["text"] if "text" in text else "",
                 color
             )
-        b, r = split_red_black(img)
-        epd.init()
-        epd.display(epd.getbuffer(b), epd.getbuffer(r))
-        epd.sleep()
         img.save(buffer, format="png")
+    return buffer
+
+def draw(epddata):
+    buffer = generate_image(epddata)
+    img = Image.open(buffer)
+    b, r = split_black_red(img)
+    epd.init()
+    epd.display(epd.getbuffer(b), epd.getbuffer(r))
+    epd.sleep()
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
 def state():
-    epddata = read_epddata()
-    return jsonify({ "status": True, "data": epddata })
+    try:
+        epddata = read_epddata()
+        imgb64 = base64.b64encode(generate_image(epddata).getvalue()).decode("utf-8")
+        return jsonify({ "status": True, "data": epddata, "image": imgb64 })
+    except Exception as e:
+        return jsonify({ "status": False, "message": "State error!\n" + str(e) + "\n" + traceback.format_exc() }), 500
+
+def preview():
+    try:
+        epddata = read_epddata()
+        if "image" in request.json:
+            epddata["image"] = request.json["image"]
+        if "texts" in request.json and isinstance(request.json["texts"], list):
+            epddata["texts"] = request.json["texts"]
+        imgb64 = base64.b64encode(generate_image(epddata).getvalue()).decode("utf-8")
+        return jsonify({ "status": True, "image": imgb64 })
+    except Exception as e:
+        return jsonify({ "status": False, "message": "Preview error!\n" + str(e) + "\n" + traceback.format_exc() }), 500

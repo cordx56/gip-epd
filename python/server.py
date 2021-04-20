@@ -2,7 +2,7 @@
 
 from flask import Flask
 from flask_cors import CORS
-from update import update, state
+from update import update, state, preview
 from image import image_list, image_save, font_list
 
 PORT = 5000
@@ -12,6 +12,7 @@ CORS(app)
 
 app.route("/update", methods=["POST"])(update)
 app.route("/state", methods=["GET"])(state)
+app.route("/preview", methods=["POST"])(preview)
 app.route("/image", methods=["GET"])(image_list)
 app.route("/image/<name>", methods=["POST"])(image_save)
 app.route("/font", methods=["GET"])(font_list)
