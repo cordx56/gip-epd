@@ -34,8 +34,8 @@ def update():
 def split_red_black(img):
     img_rgb = img.convert('RGB')
     size = img_rgb.size
-    imgb = Image.new("RGB", size)
-    imgr = Image.new("RGB", size)
+    imgb = Image.new("RGB", size, (255, 255, 255))
+    imgr = Image.new("RGB", size, (255, 255, 255))
     for x in range(size[0]):
         for y in range(size[1]):
             r, g, b = img_rgb.getpixel((x, y))
