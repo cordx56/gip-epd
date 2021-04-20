@@ -9,23 +9,27 @@ const SendTexts = () => {
   const [fonts, setFonts] = useState([]);
   const [selectedImage, setSelectedImage] = useState("");
   const [texts, setTexts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const send = () => {
     const data = {};
     data["image"] = selectedImage;
     if (0 < texts.length) {
       data["texts"] = texts;
     }
+    setIsLoading(true);
     axios
       .post(API_BASE_URL + "/update", data)
       .then((response) => {
         console.log(response);
         setReceivedImage(response.data.image);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
         if (error.response.data) {
           alert(error.response.data.message);
         }
+        setIsLoading(false);
       });
   };
 
@@ -209,8 +213,8 @@ const SendTexts = () => {
             Add Text
           </Button>
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
+        <Button variant="primary" type="submit" disabled={isLoading}>
+          {isLoading ? "Loading" : "Submit"}
         </Button>
       </Form>
       <div>
