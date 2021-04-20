@@ -5,9 +5,9 @@ import json
 import traceback
 from PIL import Image, ImageDraw, ImageFont
 from flask import request, jsonify
-#from epd5in83bc import EPD
+from epd5in83bc import EPD
 
-#epd = EPD()
+epd = EPD()
 def read_epddata():
     if not os.path.isfile("epddata.json"):
         return { "image": "", "texts": [] }
