@@ -3,6 +3,7 @@ import io
 import base64
 import json
 import traceback
+import time
 from PIL import Image, ImageDraw, ImageFont
 from flask import request, jsonify
 from epd5in83 import EPD
@@ -71,6 +72,7 @@ def draw(epddata):
     img = Image.open(buffer)
     epd.init()
     epd.display(epd.getbuffer(img))
+    time.sleep(1)
     epd.sleep()
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
